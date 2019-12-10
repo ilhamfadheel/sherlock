@@ -6,6 +6,54 @@ They are listed here in the hope that things may change in the future
 so they may be re-included.
 
 
+## Teknik
+
+As of 2019-11-30, the site causes Sherlock to just hang.
+
+```
+  "Teknik": {
+    "errorMsg": "The user does not exist",
+    "errorType": "message",
+    "rank": 357163,
+    "url": "https://user.teknik.io/{}",
+    "urlMain": "https://teknik.io/",
+    "username_claimed": "red",
+    "username_unclaimed": "noonewouldeverusethis7"
+  }
+```
+
+## Shockwave
+
+As of 2019-11-28, usernames that exist give a 503 "Service Unavailable"
+HTTP Status.
+
+```
+  "Shockwave": {
+    "errorMsg": "Oh no! You just finished all of the games on the internet!",
+    "errorType": "message",
+    "rank": 35916,
+    "url": "http://www.shockwave.com/member/profiles/{}.jsp",
+    "urlMain": "http://www.shockwave.com/",
+    "username_claimed": "blue",
+    "username_unclaimed": "noonewouldeverusethis"
+  },
+```
+
+## Foursquare
+
+Usernames that exist are not detected.
+
+```
+  "Foursquare": {
+    "errorType": "status_code",
+    "rank": 1843,
+    "url": "https://foursquare.com/{}",
+    "urlMain": "https://foursquare.com/",
+    "username_claimed": "dens",
+    "username_unclaimed": "noonewouldeverusethis7"
+  },
+```
+
 ## Khan Academy
 
 Usernames that don't exist are detected.  First noticed 2019-10-25.

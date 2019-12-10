@@ -8,7 +8,7 @@
   <a target="_blank" href="https://www.python.org/downloads/" title="Python version"><img src="https://img.shields.io/badge/python-%3E=_3.6-green.svg"></a>
   <a target="_blank" href="LICENSE" title="License: MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
   <a target="_blank" href="https://travis-ci.com/TheYahya/sherlock/" title="Build Status"><img src="https://travis-ci.com/TheYahya/sherlock.svg?branch=master"></a>
-  <a target="_blank" href="https://twitter.com/intent/tweet?text=%F0%9F%94%8E%20Find%20usernames%20across%20social%20networks%20&url=https://github.com/TheYahya/sherlock&hashtags=hacking,%20osint,%20bugbounty,%20reconnaissance" title="Share on Tweeter"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
+  <a target="_blank" href="https://twitter.com/intent/tweet?text=%F0%9F%94%8E%20Find%20usernames%20across%20social%20networks%20&url=https://github.com/sherlock-project/sherlock&hashtags=hacking,%20osint,%20bugbounty,%20reconnaissance" title="Share on Tweeter"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
   <a target="_blank" href="http://sherlock-project.github.io/"><img alt="Website" src="https://img.shields.io/website-up-down-green-red/http/sherlock-project.github.io/..svg"></a>
   <a target="_blank" href="https://microbadger.com/images/theyahya/sherlock"><img alt="docker image" src="https://images.microbadger.com/badges/version/theyahya/sherlock.svg"></a>
 </p>
@@ -36,7 +36,7 @@
 
 ## Demo
 
-You can use this link to test Sherlock directly in your browser:
+Use this link to test Sherlock directly in your browser:
 https://elody.com/scenario/plan/16/
 
 ## Installation
@@ -66,10 +66,10 @@ usage: sherlock.py [-h] [--version] [--verbose] [--rank]
                    [--unique-tor] [--csv] [--site SITE_NAME]
                    [--proxy PROXY_URL] [--json JSON_FILE]
                    [--proxy_list PROXY_LIST] [--check_proxies CHECK_PROXY]
-                   [--print-found]
+                   [--timeout TIMEOUT] [--print-found]
                    USERNAMES [USERNAMES ...]
 
-Sherlock: Find Usernames Across Social Networks (Version 0.9.4)
+Sherlock: Find Usernames Across Social Networks (Version 0.9.14)
 
 positional arguments:
   USERNAMES             One or more usernames to check with social networks.
@@ -83,10 +83,10 @@ optional arguments:
                         rank in popularity.
   --folderoutput FOLDEROUTPUT, -fo FOLDEROUTPUT
                         If using multiple usernames, the output of the results
-                        will be saved at this folder.
+                        will be saved to this folder.
   --output OUTPUT, -o OUTPUT
                         If using single username, the output of the result
-                        will be saved at this file.
+                        will be saved to this file.
   --tor, -t             Make requests over Tor; increases runtime; requires
                         Tor to be installed and in system path.
   --unique-tor, -u      Make requests over Tor with new Tor circuit after each
@@ -110,11 +110,15 @@ optional arguments:
                         file are working and anonymous.Put 0 for no limit on
                         successfully checked proxies, or another number to
                         institute a limit.
+  --timeout TIMEOUT     Time (in seconds) to wait for response to requests.
+                        Default timeout of 60.0s.A longer timeout will be more
+                        likely to get results from slow sites.On the other
+                        hand, this may cause a long delay to gather all
+                        results.
   --print-found         Do not output sites where the username was not found.
-
 ```
 
-For example to search for only one user:
+To search for only one user:
 ```
 python3 sherlock.py user123
 ```
@@ -124,10 +128,13 @@ To search for more than one user:
 python3 sherlock.py user1 user2 user3
 ```
 
-All of the accounts found will be stored in an individual text file with the corresponding username (e.g ```user123.txt```).
+Accounts found will be stored in an individual text file with the corresponding username (e.g ```user123.txt```).
+
+## Anaconda (Windows) Notes
+If you are using Anaconda in Windows, using 'python3' might not work. Use 'python' instead.
 
 ## Docker Notes
-If you have docker installed you can build an image and run this as a container.
+If docker is installed you can build an image and run this as a container.
 
 ```
 docker build -t mysherlock-image .
@@ -143,7 +150,7 @@ The optional ```--rm``` flag removes the container filesystem on completion to p
 
 The optional ```-t``` flag allocates a pseudo-TTY which allows colored output. See: https://docs.docker.com/engine/reference/run/#foreground
 
-It is possible to use the following command to access the saved results:
+Use the following command to access the saved results:
 
 ```
 docker run --rm -t -v "$PWD/results:/opt/sherlock/results" mysherlock-image -o /opt/sherlock/results/text.txt user123
@@ -153,17 +160,17 @@ The ```-v "$PWD/results:/opt/sherlock/results"``` option tells docker to create 
 present working directory and to mount it at `/opt/sherlock/results` on the docker container.
 The `-o /opt/sherlock/results/text.txt` option tells `sherlock` to output the result.
 
-Or you can simply use "Docker Hub" to run `sherlock`:
+Or you can use "Docker Hub" to run `sherlock`:
 ```
 docker run theyahya/sherlock user123
 ```
 
 ### Using `docker-compose`
 
-You can also use the `docker-compose.yml` file from the repository and use this command
+You can use the `docker-compose.yml` file from the repository and use this command:
 
 ```
-docker-compose run sherlok -o /opt/sherlock/results/text.txt user123
+docker-compose run sherlock -o /opt/sherlock/results/text.txt user123
 ```
 
 ## Adding New Sites
@@ -175,7 +182,7 @@ to understand the issues.
 **NOTE**: Sherlock is not accepting adult sites in the standard list.
 
 ## Tests
-If you are contributing to Sherlock, then Thank You!
+Thank you for contributing to Sherlock!
 
 Before creating a pull request with new development, please run the tests
 to ensure that everything is working great.  It would also be a good idea to run the tests
@@ -193,6 +200,10 @@ $ python3 -m unittest tests.all --buffer --verbose
 Note that we do currently have 100% test coverage.  Unfortunately, some of
 the sites that Sherlock checks are not always reliable, so it is common
 to get response errors.
+
+If some sites are failing due to conection problems (site is down, in maintainence, etc)
+you can exclude them from tests by creating a `tests/.excluded_sites` file with a
+list of sites to ignore (one site name per line).
 
 ## Stargazers over time
 
